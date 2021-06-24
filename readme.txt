@@ -1,2 +1,3 @@
 tavaraa
 lisää tavaraa
+* virheellinen * 
