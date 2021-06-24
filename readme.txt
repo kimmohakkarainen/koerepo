@@ -1,2 +1,1 @@
-korjattu sisältö
-(peruutus)
+tavaraa
