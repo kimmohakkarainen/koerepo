@@ -9,7 +9,7 @@ import TimeRange from "../reportview/timerange";
 import Filter from "../reportview/filter";
 
 Moment.locale("fi");
-momentLocalizer();
+/* new momentLocalizer(); */
 
 function FilterPanel({
   fetchBudgetPreview,
@@ -23,7 +23,7 @@ function FilterPanel({
   projectOptions
 }) {
   useEffect(() => {
-	  fetchBudgetPreview({});
+    fetchBudgetPreview({});
   }, []);
 
   function onChangeTimeRange(range) {
@@ -74,13 +74,10 @@ function mapStateToProps(state) {
   return state.budgetview;
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    fetchBudgetPreview: params => dispatch(fetchBudgetPreview(params))
+    fetchBudgetPreview: (params) => dispatch(fetchBudgetPreview(params))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FilterPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(FilterPanel);
