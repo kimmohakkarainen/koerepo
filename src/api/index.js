@@ -88,6 +88,11 @@ export function postBudgetPreview(params) {
   /* return client.post("/rest/admin/budget", params); */
 }
 
+export function postBudgetPricing(params) {
+  return client.post("/rest/budget/pricing/1", params);
+  /* return client.post("/rest/admin/budget/pricing", params); */
+}
+
 export function getExcel(params) {
   return excelClient.post("/rest/admin/report/xlsx", params);
 }
