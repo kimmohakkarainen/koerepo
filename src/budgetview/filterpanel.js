@@ -2,14 +2,10 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 import Moment from "moment";
-import momentLocalizer from "react-widgets-moment";
 
 import { fetchBudgetPreview } from "../actions/";
 import TimeRange from "../reportview/timerange";
 import Filter from "../reportview/filter";
-
-Moment.locale("fi");
-/* new momentLocalizer(); */
 
 function FilterPanel({
   fetchBudgetPreview,

@@ -84,7 +84,8 @@ export function postGraphPreview(params) {
  */
 
 export function postBudgetPreview(params) {
-  return client.post("/rest/admin/budget", params);
+  return client.post("/rest/budget/1", params);
+  /* return client.post("/rest/admin/budget", params); */
 }
 
 export function getExcel(params) {

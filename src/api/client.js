@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "";
+const API_BASE_URL = "http://localhost:8187";
 
 export const client = axios.create({
   baseURL: API_BASE_URL,
@@ -24,7 +24,7 @@ export const excelClient = axios.create({
  * Check each response whether content-type is not JSON. This indicates that
  * session has timed out
  */
-client.interceptors.response.use(function(response) {
+client.interceptors.response.use(function (response) {
   const type = response.headers["content-type"];
   const valid = /application\/json/.test(type);
 

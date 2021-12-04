@@ -4,18 +4,29 @@ import { connect } from "react-redux";
 import FilterPanel from "./filterpanel";
 import { Card, Container } from "react-bootstrap";
 
-import { sankeyLinkHorizontal, sankey, sankeyJustify, sankeyCenter, sankeyLeft, sankeyRight } from "d3-sankey";
+import {
+  sankeyLinkHorizontal,
+  sankey,
+  sankeyJustify,
+  sankeyCenter,
+  sankeyLeft,
+  sankeyRight
+} from "d3-sankey";
 import { interpolateCool, interpolateWarm } from "d3-scale-chromatic";
 import { rgb } from "d3-color";
 import { select } from "d3-selection";
 import { easeLinear, scaleOrdinal, schemeCategory10 } from "d3";
+import "react-widgets/styles.css";
 
 function calculateSankey(data, width, height) {
   const sankeyimpl = sankey()
     .nodeAlign(sankeyCenter)
     .nodeWidth(10)
     .nodePadding(10)
-    .extent([[0, 5], [width, height]]);
+    .extent([
+      [0, 5],
+      [width, height]
+    ]);
 
   return sankeyimpl(data);
 }
@@ -56,39 +67,35 @@ function BudgetView({ data }) {
       .selectAll("rect")
       .data(nodes)
       .join(
-        enter => {
+        (enter) => {
           const e = enter.append("rect");
 
-          e.attr("x", d => d.x0).attr("y", d => d.y0);
+          e.attr("x", (d) => d.x0).attr("y", (d) => d.y0);
 
           e.transition(easeLinear)
             .delay(1000)
             .duration(500)
-            .attr("height", d => d.y1 - d.y0)
-            .attr("width", d => d.x1 - d.x0)
-            .attr("dataIndex", d => d.index)
-            .attr("fill", d => colors(d.index / nodes.length));
-          e.append("title").text(d => `${d.name}\n${d.hours}`);
+            .attr("height", (d) => d.y1 - d.y0)
+            .attr("width", (d) => d.x1 - d.x0)
+            .attr("dataIndex", (d) => d.index)
+            .attr("fill", (d) => colors(d.index / nodes.length));
+          e.append("title").text((d) => `${d.name}\n${d.hours}`);
         },
-        update =>
+        (update) =>
           update
             .transition(easeLinear)
             .delay(500)
             .duration(500)
-            .attr("x", d => d.x0)
-            .attr("y", d => d.y0)
-            .attr("height", d => d.y1 - d.y0)
-            .attr("width", d => d.x1 - d.x0)
-            .attr("dataIndex", d => d.index)
-            .attr("fill", d => colors(d.index / nodes.length))
+            .attr("x", (d) => d.x0)
+            .attr("y", (d) => d.y0)
+            .attr("height", (d) => d.y1 - d.y0)
+            .attr("width", (d) => d.x1 - d.x0)
+            .attr("dataIndex", (d) => d.index)
+            .attr("fill", (d) => colors(d.index / nodes.length))
             .select("title")
-            .text(d => `${d.name}\n${d.hours}`),
-        exit =>
-          exit
-            .transition(easeLinear)
-            .duration(500)
-            .style("opacity", 0)
-            .remove()
+            .text((d) => `${d.name}\n${d.hours}`),
+        (exit) =>
+          exit.transition(easeLinear).duration(500).style("opacity", 0).remove()
       );
 
     select(svgRef.current)
@@ -96,32 +103,36 @@ function BudgetView({ data }) {
       .selectAll("text")
       .data(nodes)
       .join(
-        enter => {
+        (enter) => {
           const e = enter.append("text");
 
           e.transition(easeLinear)
             .delay(1000)
             .duration(500)
-            .attr("x", d => (d.x0 < size.width / 2 ? d.x1 + 6 : d.x0 - 6))
-            .attr("y", d => (d.y1 + d.y0) / 2)
-            .attr("fill", d => rgb(colors(d.index / nodes.length)).darker())
+            .attr("x", (d) => (d.x0 < size.width / 2 ? d.x1 + 6 : d.x0 - 6))
+            .attr("y", (d) => (d.y1 + d.y0) / 2)
+            .attr("fill", (d) => rgb(colors(d.index / nodes.length)).darker())
             .attr("alignment-baseline", "middle")
-            .attr("text-anchor", d => (d.x0 < size.width / 2 ? "start" : "end"))
+            .attr("text-anchor", (d) =>
+              d.x0 < size.width / 2 ? "start" : "end"
+            )
             .attr("font-size", 9)
-            .text(d => d.name);
+            .text((d) => d.name);
         },
-        update =>
+        (update) =>
           update
             .transition(easeLinear)
             .delay(500)
             .duration(500)
-            .attr("x", d => (d.x0 < size.width / 2 ? d.x1 + 6 : d.x0 - 6))
-            .attr("y", d => (d.y1 + d.y0) / 2)
-            .attr("fill", d => rgb(colors(d.index / nodes.length)).darker())
-            .attr("text-anchor", d => (d.x0 < size.width / 2 ? "start" : "end"))
+            .attr("x", (d) => (d.x0 < size.width / 2 ? d.x1 + 6 : d.x0 - 6))
+            .attr("y", (d) => (d.y1 + d.y0) / 2)
+            .attr("fill", (d) => rgb(colors(d.index / nodes.length)).darker())
+            .attr("text-anchor", (d) =>
+              d.x0 < size.width / 2 ? "start" : "end"
+            )
             .attr("font-size", 9)
-            .text(d => d.name),
-        exit =>
+            .text((d) => d.name),
+        (exit) =>
           exit
             .transition(easeLinear)
             /* .delay(500) */
@@ -135,40 +146,40 @@ function BudgetView({ data }) {
       .selectAll("linearGradient")
       .data(links)
       .join(
-        enter => {
+        (enter) => {
           const lg = enter.append("linearGradient");
 
-          lg.attr("id", d => `gradient-${d.index}`)
+          lg.attr("id", (d) => `gradient-${d.index}`)
             .attr("gradientUnits", "userSpaceOnUse")
-            .attr("x1", d => d.source.x1)
-            .attr("x2", d => d.target.x0);
+            .attr("x1", (d) => d.source.x1)
+            .attr("x2", (d) => d.target.x0);
 
           lg.append("stop")
             .attr("offset", "0")
-            .attr("stop-color", d => colors(d.source.index / nodes.length));
+            .attr("stop-color", (d) => colors(d.source.index / nodes.length));
 
           lg.append("stop")
             .attr("offset", "100%")
-            .attr("stop-color", d => colors(d.target.index / nodes.length));
+            .attr("stop-color", (d) => colors(d.target.index / nodes.length));
         },
-        update => {
+        (update) => {
           update
-            .attr("id", d => `gradient-${d.index}`)
+            .attr("id", (d) => `gradient-${d.index}`)
             .attr("gradientUnits", "userSpaceOnUse")
-            .attr("x1", d => d.source.x1)
-            .attr("x2", d => d.target.x0);
+            .attr("x1", (d) => d.source.x1)
+            .attr("x2", (d) => d.target.x0);
           update.selectAll("stop").remove();
           update
             .append("stop")
             .attr("offset", "0")
-            .attr("stop-color", d => colors(d.source.index / nodes.length));
+            .attr("stop-color", (d) => colors(d.source.index / nodes.length));
 
           update
             .append("stop")
             .attr("offset", "100%")
-            .attr("stop-color", d => colors(d.target.index / nodes.length));
+            .attr("stop-color", (d) => colors(d.target.index / nodes.length));
         },
-        exit => exit.remove()
+        (exit) => exit.remove()
       );
 
     select(svgRef.current)
@@ -176,27 +187,27 @@ function BudgetView({ data }) {
       .selectAll("path")
       .data(links)
       .join(
-        enter => {
+        (enter) => {
           const e = enter.append("path");
           e.transition(easeLinear)
             .delay(1000)
             .duration(500)
             .attr("d", sankeyLinkHorizontal())
-            .attr("stroke", d => `url(#gradient-${d.index}`)
-            .attr("stroke-width", d => d.width);
-          e.append("title").text(d => `${d.hours}`);
+            .attr("stroke", (d) => `url(#gradient-${d.index}`)
+            .attr("stroke-width", (d) => d.width);
+          e.append("title").text((d) => `${d.hours}`);
         },
-        update =>
+        (update) =>
           update
             .transition(easeLinear)
             .delay(500)
             .duration(500)
             .attr("d", sankeyLinkHorizontal())
-            .attr("stroke", d => `url(#gradient-${d.index}`)
-            .attr("stroke-width", d => d.width)
+            .attr("stroke", (d) => `url(#gradient-${d.index}`)
+            .attr("stroke-width", (d) => d.width)
             .select("title")
-            .text(d => `${d.hours}`),
-        exit =>
+            .text((d) => `${d.hours}`),
+        (exit) =>
           exit
             .transition(easeLinear)
             /* .delay(1000) */
