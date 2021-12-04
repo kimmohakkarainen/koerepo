@@ -13,6 +13,7 @@ export default function rapsaState(
     reportview: {},
     graphview: {},
     budgetview: {},
+    pricingview: {},
     passwordview: {},
     projectprefview: [],
     flexprojects: {
@@ -23,12 +24,12 @@ export default function rapsaState(
     personadmin: [],
     flexpersons: { header: [], persons: [] },
     flexView: {},
-    vacationview: { types: [], periods: []},
+    vacationview: { types: [], periods: [] },
     vacationadminview: []
   },
   action
 ) {
-	console.log(action);
+  console.log(action);
   const newstate = Object.assign({}, state, action.payload);
   return newstate;
 }

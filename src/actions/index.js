@@ -6,14 +6,14 @@ export * from "./flexhour";
 export * from "./vacation";
 
 export function postLogout() {
-  return dispatch => {
+  return (dispatch) => {
     api
       .postLogout()
-      .then(resp => {
+      .then((resp) => {
         console.log("logout successfull");
         window.location.href = "/logout";
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("logout error");
         window.location.href = "/logout";
       });
@@ -21,26 +21,26 @@ export function postLogout() {
 }
 
 export function fetchDay(date) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .getDay(date)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchDaySucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
 }
 
 export function postDay(params) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .postDay(params)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchDaySucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
@@ -57,26 +57,26 @@ export function fetchDaySucceeded(data) {
  */
 
 export function fetchWeek(date) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .getWeek(date)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchWeekSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
 }
 
 export function postWeek(params) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .postWeek(params)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchWeekSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
@@ -93,13 +93,13 @@ export function fetchWeekSucceeded(data) {
  */
 
 export function fetchMonth(date) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .getMonth(date)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchMonthSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
@@ -117,26 +117,26 @@ export function fetchMonthSucceeded(data) {
  */
 
 export function fetchCustomers() {
-  return dispatch => {
+  return (dispatch) => {
     api
       .getCustomers()
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchCustomersSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
 }
 
 export function postCustomer(data) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .postCustomer(data)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchCustomersSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
@@ -150,26 +150,26 @@ export function fetchCustomersSucceeded(data) {
 }
 
 export function fetchCustomerProjects(customerId) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .getCustomer(customerId)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchCustomerProjectsSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
 }
 
 export function postCustomerProject(data) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .postProject(data)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchCustomerProjectsSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
@@ -187,14 +187,14 @@ export function fetchCustomerProjectsSucceeded(data) {
  */
 
 export function fetchGraphPreview(params) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(fetchGraphPreviewSucceeded(params));
     api
       .postGraphPreview(params)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchGraphPreviewSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
@@ -210,16 +210,16 @@ export function fetchGraphPreviewSucceeded(data) {
 /*
  * Budget graph
  */
- 
+
 export function fetchBudgetPreview(params) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(fetchBudgetPreviewSucceeded(params));
     api
       .postBudgetPreview(params)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchBudgetPreviewSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
@@ -232,34 +232,52 @@ export function fetchBudgetPreviewSucceeded(data) {
   };
 }
 
+export function fetchBudgetPricing(params) {
+  return (dispatch) => {
+    dispatch(fetchBudgetPricingSucceeded(params));
+    api
+      .postBudgetPricing(params)
+      .then((resp) => {
+        dispatch(fetchBudgetPricingSucceeded(resp.data));
+      })
+      .catch((error) => {
+        dispatch(fetchError(error));
+      });
+  };
+}
 
-
+export function fetchBudgetPricingSucceeded(data) {
+  return {
+    type: "FETCH_BUDGET_PRICING_SUCCEEDED",
+    payload: { pricingview: data, error: null }
+  };
+}
 
 /*
  * Who Am I and Preferences
  */
 
 export function fetchWhoAmI(params) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .getWhoAmI()
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchWhoAmISucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
 }
 
 export function postPreferences(params) {
-  return dispatch => {
+  return (dispatch) => {
     api
       .postPreferences(params)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchWhoAmISucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
@@ -277,15 +295,15 @@ export function fetchWhoAmISucceeded(data) {
  */
 
 export function postProjectPreferences(params) {
-  return dispatch => {
+  return (dispatch) => {
     /* ensure there is no previous results available */
     dispatch(fetchProjectPreferencesSucceeded([]));
     api
       .postProjectPreferences(params)
-      .then(resp => {
+      .then((resp) => {
         dispatch(fetchProjectPreferencesSucceeded(resp.data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(fetchError(error));
       });
   };
