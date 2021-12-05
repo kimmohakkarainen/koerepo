@@ -14,7 +14,10 @@ import { connect } from "react-redux";
 
 import { fetchBudgetPricing } from "../actions";
 
+import CustomerRow from "./customerrow";
+
 function PricingView({ pricingview, fetchBudgetPricing }) {
+  const [byCustomer, setByCustomer] = useState(true);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
 
@@ -25,32 +28,24 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
   const customers = pricingview.customers == null ? [] : pricingview.customers;
   const persons = pricingview.persons == null ? [] : pricingview.persons;
 
-  /*  console.log(customers);
-  console.log(persons); */
-
-  function selectCustomer(customerId) {
-    setSelectedCustomer(customerId);
-    fetchBudgetPricing({ byCustomer: true, customerId: customerId });
-  }
-
-  function selectCustomerPerson(customerId, personId, sellPrice) {
+  function updateCPP(customerId, personId, projectId, sellPrice) {
     setSelectedCustomer(customerId);
     setSelectedPerson(personId);
     fetchBudgetPricing({
-      byCustomer: true,
+      byCustomer: byCustomer,
       customerId: customerId,
       personId: personId,
+      projectId: projectId,
       sellPrice: sellPrice
     });
   }
 
-  return (
-    <>
-      {customers.map((c) => {
-        if (c.persons == null) {
+  /*
           return (
             <Card key={c.customerId}>
-              <Card.Header onClick={() => selectCustomer(c.customerId)}>
+              <Card.Header
+                onClick={() => updateCPP(c.customerId, null, null, null)}
+              >
                 {c.name}
                 {selectedCustomer === c.customerId && (
                   <Spinner animation="grow" />
@@ -61,10 +56,24 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
               </Collapse>
             </Card>
           );
+
+*/
+
+  return (
+    <>
+      {customers.map((c) => {
+        if (c.persons == null) {
+          return (
+            <CustomerRow
+              c={c}
+              selectedCustomer={selectedCustomer}
+              updateCPP={updateCPP}
+            />
+          );
         } else {
           return (
             <Card key={c.customerId}>
-              <Card.Header onClick={() => selectCustomer(null)}>
+              <Card.Header onClick={() => updateCPP(null, null, null, null)}>
                 {c.name}
                 {selectedCustomer !== c.customerId && (
                   <Spinner animation="grow" />
@@ -81,11 +90,21 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
                               <Row
                                 key={p.personId}
                                 onClick={() =>
-                                  selectCustomerPerson(c.customerId, p.personId)
+                                  updateCPP(
+                                    c.customerId,
+                                    p.personId,
+                                    null,
+                                    null
+                                  )
                                 }
                               >
                                 <Col>{p.fullname}</Col>
                                 <Col>{p.sellPrice}</Col>
+                                <Col>
+                                  {selectedPerson === p.personId && (
+                                    <Spinner animation="grow" />
+                                  )}
+                                </Col>
                               </Row>
                             </Card.Header>
                             <Collapse in={false}>
@@ -99,7 +118,9 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
                             <Card.Header>
                               <Row>
                                 <Col
-                                  onClick={() => selectCustomer(c.customerId)}
+                                  onClick={() =>
+                                    updateCPP(c.customerId, null, null, null)
+                                  }
                                 >
                                   {p.fullname}
                                 </Col>
@@ -107,13 +128,19 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
                                   <FormControl
                                     value={p.sellPrice}
                                     onChange={(e) =>
-                                      selectCustomerPerson(
+                                      updateCPP(
                                         c.customerId,
                                         p.personId,
+                                        null,
                                         e.target.value
                                       )
                                     }
                                   />
+                                </Col>
+                                <Col>
+                                  {selectedPerson !== p.personId && (
+                                    <Spinner animation="grow" />
+                                  )}
                                 </Col>
                               </Row>
                             </Card.Header>
@@ -124,7 +151,17 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
                                     <Row>
                                       <Col>{pp.name}</Col>
                                       <Col>
-                                        <FormControl value={pp.sellPrice} />
+                                        <FormControl
+                                          value={pp.sellPrice}
+                                          onChange={(e) =>
+                                            updateCPP(
+                                              c.customerId,
+                                              p.personId,
+                                              pp.projectId,
+                                              e.target.value
+                                            )
+                                          }
+                                        />
                                       </Col>
                                     </Row>
                                   );
@@ -150,10 +187,6 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
 }
 
 function mapStateToProps(state) {
-  const props = {
-    error: state.error,
-    data: state.pricingview
-  };
   return state;
 }
 
