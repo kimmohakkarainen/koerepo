@@ -234,7 +234,7 @@ export function fetchBudgetPreviewSucceeded(data) {
 
 export function fetchBudgetPricing(params) {
   return (dispatch) => {
-    dispatch(fetchBudgetPricingSucceeded(params));
+    /* dispatch(fetchBudgetPricingSucceeded(params)); */
     api
       .postBudgetPricing(params)
       .then((resp) => {

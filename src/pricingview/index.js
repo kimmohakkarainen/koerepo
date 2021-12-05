@@ -1,36 +1,51 @@
 import React, { useRef, useEffect, useLayoutEffect, useState } from "react";
-import { Card, ListGroup, Container, Row, Col } from "react-bootstrap";
+import { Card, ListGroup, Container, Row, Col, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 
 import { fetchBudgetPricing } from "../actions";
 
 function PricingView({ pricingview, fetchBudgetPricing }) {
-  const [size, setSize] = useState({ width: 0, height: 0 });
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   useEffect(() => {
-    fetchBudgetPricing({ byCustomer: true, customerId: 1 });
+    fetchBudgetPricing({ byCustomer: true });
   }, []);
 
   const customers = pricingview.customers == null ? [] : pricingview.customers;
   const persons = pricingview.persons == null ? [] : pricingview.persons;
 
-  console.log(customers);
-  console.log(persons);
+  /*  console.log(customers);
+  console.log(persons); */
+
+  function selectCustomer(customerId) {
+    setSelectedCustomer(customerId);
+    fetchBudgetPricing({ byCustomer: true, customerId, customerId });
+  }
 
   return (
     <>
       {customers.map((c) => {
         if (c.persons == null) {
           return (
-            <Card>
-              <Card.Header>{c.name}</Card.Header>
+            <Card key={c.customerId}>
+              <Card.Header onClick={() => selectCustomer(c.customerId)}>
+                {c.name}
+                {selectedCustomer === c.customerId && (
+                  <Spinner animation="grow" />
+                )}
+              </Card.Header>
             </Card>
           );
         } else {
           return (
-            <Card>
-              <Card.Header>{c.name}</Card.Header>
-              <Card.Body>
+            <Card key={c.customerId}>
+              <Card.Header onClick={() => selectCustomer(null)}>
+                {c.name}
+                {selectedCustomer !== c.customerId && (
+                  <Spinner animation="grow" />
+                )}
+              </Card.Header>
+              <Card.Body key={c.customerId}>
                 <Container>
                   {c.persons.map((p) => {
                     return (
