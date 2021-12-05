@@ -1,14 +1,56 @@
 import React, { useRef, useEffect, useLayoutEffect, useState } from "react";
+import { Card, ListGroup, Container, Row, Col } from "react-bootstrap";
 import { connect } from "react-redux";
 
 import { fetchBudgetPricing } from "../actions";
 
-function PricingView({ data, fetchBudgetPricing }) {
+function PricingView({ pricingview, fetchBudgetPricing }) {
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
   useEffect(() => {
-    fetchBudgetPricing({});
+    fetchBudgetPricing({ byCustomer: true, customerId: 1 });
   }, []);
 
-  return <div>hello</div>;
+  const customers = pricingview.customers == null ? [] : pricingview.customers;
+  const persons = pricingview.persons == null ? [] : pricingview.persons;
+
+  console.log(customers);
+  console.log(persons);
+
+  return (
+    <>
+      {customers.map((c) => {
+        if (c.persons == null) {
+          return (
+            <Card>
+              <Card.Header>{c.name}</Card.Header>
+            </Card>
+          );
+        } else {
+          return (
+            <Card>
+              <Card.Header>{c.name}</Card.Header>
+              <Card.Body>
+                <Container>
+                  {c.persons.map((p) => {
+                    return (
+                      <Row>
+                        <Col>{p.fullname}</Col>
+                        <Col>{p.sellPrice}</Col>
+                      </Row>
+                    );
+                  })}
+                </Container>
+              </Card.Body>
+            </Card>
+          );
+        }
+      })}
+      {persons.map((p) => {
+        return <div>{p.fullname}</div>;
+      })}
+    </>
+  );
 }
 
 function mapStateToProps(state) {
@@ -16,7 +58,7 @@ function mapStateToProps(state) {
     error: state.error,
     data: state.pricingview
   };
-  return props;
+  return state;
 }
 
 const mapDispatchToProps = (dispatch) => {
