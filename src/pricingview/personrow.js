@@ -16,7 +16,7 @@ export default function PersonRow({ p, selectedPerson, updateCPP }) {
     <Card key={p.personId}>
       <Card.Header onClick={() => updateCPP(null, p.personId, null, null)}>
         <Row>
-          <Col>{p.fullName}</Col>
+          <Col>{p.fullname}</Col>
           <Col>
             {selectedPerson === p.personId && <Spinner animation="grow" />}
           </Col>

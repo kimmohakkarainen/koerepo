@@ -38,10 +38,10 @@ export default function PersonCustomerRowFull({
         </Row>
       </Card.Header>
       <Collapse in={true}>
-        <Card.Body key={c.customerId}>
-          {p.projects.map((pp) => {
+        <Card.Body>
+          {c.projects.map((pp) => {
             return (
-              <Row>
+              <Row key={pp.projectId}>
                 <Col>{pp.name}</Col>
                 <Col>
                   <FormControl

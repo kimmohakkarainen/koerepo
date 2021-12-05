@@ -27,6 +27,7 @@ export default function PersonList({
         if (p.customers == null) {
           return (
             <PersonRow
+              key={p.personId}
               p={p}
               selectedPerson={selectedPerson}
               updateCPP={updateCPP}
@@ -37,7 +38,7 @@ export default function PersonList({
             <Card key={p.personId}>
               <Card.Header onClick={() => updateCPP(null, null, null, null)}>
                 <Row>
-                  <Col>{p.fullName}</Col>
+                  <Col>{p.fullname}</Col>
                   <Col>
                     {selectedPerson !== p.personId && (
                       <Spinner animation="grow" />
@@ -52,6 +53,7 @@ export default function PersonList({
                       if (c.projects == null) {
                         return (
                           <PersonCustomerRow
+                            key={p.personId}
                             c={c}
                             p={p}
                             selectedCustomer={selectedCustomer}
@@ -61,6 +63,7 @@ export default function PersonList({
                       } else {
                         return (
                           <PersonCustomerRowFull
+                            key={p.personId}
                             c={c}
                             p={p}
                             selectedCustomer={selectedCustomer}

@@ -21,12 +21,12 @@ import CustomerList from "./customerlist";
 import PersonList from "./personlist";
 
 function PricingView({ pricingview, fetchBudgetPricing }) {
-  const [byCustomer, setByCustomer] = useState(true);
+  const [byCustomer, setByCustomer] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
 
   useEffect(() => {
-    fetchBudgetPricing({ byCustomer: true });
+    fetchBudgetPricing({ byCustomer: false });
   }, []);
 
   const customers = pricingview.customers == null ? [] : pricingview.customers;
