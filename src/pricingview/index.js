@@ -1,11 +1,21 @@
 import React, { useRef, useEffect, useLayoutEffect, useState } from "react";
-import { Card, ListGroup, Container, Row, Col, Spinner } from "react-bootstrap";
+import {
+  Card,
+  ListGroup,
+  Container,
+  Row,
+  Col,
+  Spinner,
+  InputGroup,
+  FormControl
+} from "react-bootstrap";
 import { connect } from "react-redux";
 
 import { fetchBudgetPricing } from "../actions";
 
 function PricingView({ pricingview, fetchBudgetPricing }) {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedPerson, setSelectedPerson] = useState(null);
 
   useEffect(() => {
     fetchBudgetPricing({ byCustomer: true });
@@ -19,7 +29,18 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
 
   function selectCustomer(customerId) {
     setSelectedCustomer(customerId);
-    fetchBudgetPricing({ byCustomer: true, customerId, customerId });
+    fetchBudgetPricing({ byCustomer: true, customerId: customerId });
+  }
+
+  function selectCustomerPerson(customerId, personId, sellPrice) {
+    setSelectedCustomer(customerId);
+    setSelectedPerson(personId);
+    fetchBudgetPricing({
+      byCustomer: true,
+      customerId: customerId,
+      personId: personId,
+      sellPrice: sellPrice
+    });
   }
 
   return (
@@ -48,12 +69,45 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
               <Card.Body key={c.customerId}>
                 <Container>
                   {c.persons.map((p) => {
-                    return (
-                      <Row>
-                        <Col>{p.fullname}</Col>
-                        <Col>{p.sellPrice}</Col>
-                      </Row>
-                    );
+                    if (p.projects == null) {
+                      return (
+                        <Row
+                          key={p.personId}
+                          onClick={() =>
+                            selectCustomerPerson(c.customerId, p.personId)
+                          }
+                        >
+                          <Col>{p.fullname}</Col>
+                          <Col>{p.sellPrice}</Col>
+                        </Row>
+                      );
+                    } else {
+                      return (
+                        <Card key={p.personId}>
+                          <Card.Header
+                            key={p.personId}
+                            onClick={() => selectCustomer(c.customerId)}
+                          >
+                            <Col>{p.fullname}</Col>
+                            <Col>
+                              <FormControl value={p.sellPrice} />
+                            </Col>
+                          </Card.Header>
+                          <Card.Body>
+                            {p.projects.map((pp) => {
+                              return (
+                                <Row>
+                                  <Col>{pp.name}</Col>
+                                  <Col>
+                                    <FormControl value={pp.sellPrice} />
+                                  </Col>
+                                </Row>
+                              );
+                            })}
+                          </Card.Body>
+                        </Card>
+                      );
+                    }
                   })}
                 </Container>
               </Card.Body>
