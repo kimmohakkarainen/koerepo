@@ -18,6 +18,7 @@ import CustomerRow from "./customerrow";
 import CustomerPersonRow from "./customerpersonrow";
 import CustomerPersonRowFull from "./customerpersonrowfull";
 import CustomerList from "./customerlist";
+import PersonList from "./personlist";
 
 function PricingView({ pricingview, fetchBudgetPricing }) {
   const [byCustomer, setByCustomer] = useState(true);
@@ -43,62 +44,6 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
     });
   }
 
-  /*
-  {customers.map((c) => {
-        if (c.persons == null) {
-          return (
-            <CustomerRow
-              c={c}
-              selectedCustomer={selectedCustomer}
-              updateCPP={updateCPP}
-            />
-          );
-        } else {
-          return (
-            <Card key={c.customerId}>
-              <Card.Header onClick={() => updateCPP(null, null, null, null)}>
-                <Row>
-                  <Col>{c.name}</Col>
-                  <Col>
-                    {selectedCustomer !== c.customerId && (
-                      <Spinner animation="grow" />
-                    )}
-                  </Col>
-                </Row>
-              </Card.Header>
-              <Collapse in={true}>
-                <Card.Body key={c.customerId}>
-                  <Container>
-                    {c.persons.map((p) => {
-                      if (p.projects == null) {
-                        return (
-                          <CustomerPersonRow
-                            c={c}
-                            p={p}
-                            selectedPerson={selectedPerson}
-                            updateCPP={updateCPP}
-                          />
-                        );
-                      } else {
-                        return (
-                          <CustomerPersonRowFull
-                            c={c}
-                            p={p}
-                            selectedPerson={selectedPerson}
-                            updateCPP={updateCPP}
-                          />
-                        );
-                      }
-                    })}
-                  </Container>
-                </Card.Body>
-              </Collapse>
-            </Card>
-          );
-        }
-      })}
-      */
-
   return (
     <>
       <CustomerList
@@ -107,10 +52,12 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
         selectedPerson={selectedPerson}
         updateCPP={updateCPP}
       />
-
-      {persons.map((p) => {
-        return <div>{p.fullname}</div>;
-      })}
+      <PersonList
+        persons={persons}
+        selectedCustomer={selectedCustomer}
+        selectedPerson={selectedPerson}
+        updateCPP={updateCPP}
+      />
     </>
   );
 }
