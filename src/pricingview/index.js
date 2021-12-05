@@ -7,7 +7,8 @@ import {
   Col,
   Spinner,
   InputGroup,
-  FormControl
+  FormControl,
+  Collapse
 } from "react-bootstrap";
 import { connect } from "react-redux";
 
@@ -55,6 +56,9 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
                   <Spinner animation="grow" />
                 )}
               </Card.Header>
+              <Collapse in={false}>
+                <Card.Body key={c.customerId} />
+              </Collapse>
             </Card>
           );
         } else {
@@ -66,51 +70,74 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
                   <Spinner animation="grow" />
                 )}
               </Card.Header>
-              <Card.Body key={c.customerId}>
-                <Container>
-                  {c.persons.map((p) => {
-                    if (p.projects == null) {
-                      return (
-                        <Row
-                          key={p.personId}
-                          onClick={() =>
-                            selectCustomerPerson(c.customerId, p.personId)
-                          }
-                        >
-                          <Col>{p.fullname}</Col>
-                          <Col>{p.sellPrice}</Col>
-                        </Row>
-                      );
-                    } else {
-                      return (
-                        <Card key={p.personId}>
-                          <Card.Header
-                            key={p.personId}
-                            onClick={() => selectCustomer(c.customerId)}
-                          >
-                            <Col>{p.fullname}</Col>
-                            <Col>
-                              <FormControl value={p.sellPrice} />
-                            </Col>
-                          </Card.Header>
-                          <Card.Body>
-                            {p.projects.map((pp) => {
-                              return (
-                                <Row>
-                                  <Col>{pp.name}</Col>
-                                  <Col>
-                                    <FormControl value={pp.sellPrice} />
-                                  </Col>
-                                </Row>
-                              );
-                            })}
-                          </Card.Body>
-                        </Card>
-                      );
-                    }
-                  })}
-                </Container>
-              </Card.Body>
+              <Collapse in={true}>
+                <Card.Body key={c.customerId}>
+                  <Container>
+                    {c.persons.map((p) => {
+                      if (p.projects == null) {
+                        return (
+                          <Card key={p.personId}>
+                            <Card.Header>
+                              <Row
+                                key={p.personId}
+                                onClick={() =>
+                                  selectCustomerPerson(c.customerId, p.personId)
+                                }
+                              >
+                                <Col>{p.fullname}</Col>
+                                <Col>{p.sellPrice}</Col>
+                              </Row>
+                            </Card.Header>
+                            <Collapse in={false}>
+                              <Card.Body key={p.personId} />
+                            </Collapse>
+                          </Card>
+                        );
+                      } else {
+                        return (
+                          <Card key={p.personId}>
+                            <Card.Header>
+                              <Row>
+                                <Col
+                                  onClick={() => selectCustomer(c.customerId)}
+                                >
+                                  {p.fullname}
+                                </Col>
+                                <Col>
+                                  <FormControl
+                                    value={p.sellPrice}
+                                    onChange={(e) =>
+                                      selectCustomerPerson(
+                                        c.customerId,
+                                        p.personId,
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </Col>
+                              </Row>
+                            </Card.Header>
+                            <Collapse in={true}>
+                              <Card.Body key={p.personId}>
+                                {p.projects.map((pp) => {
+                                  return (
+                                    <Row>
+                                      <Col>{pp.name}</Col>
+                                      <Col>
+                                        <FormControl value={pp.sellPrice} />
+                                      </Col>
+                                    </Row>
+                                  );
+                                })}
+                              </Card.Body>
+                            </Collapse>
+                          </Card>
+                        );
+                      }
+                    })}
+                  </Container>
+                </Card.Body>
+              </Collapse>
             </Card>
           );
         }
