@@ -8,7 +8,9 @@ import {
   Spinner,
   InputGroup,
   FormControl,
-  Collapse
+  Collapse,
+  Tabs,
+  Tab
 } from "react-bootstrap";
 import { connect } from "react-redux";
 
@@ -21,12 +23,12 @@ import CustomerList from "./customerlist";
 import PersonList from "./personlist";
 
 function PricingView({ pricingview, fetchBudgetPricing }) {
-  const [byCustomer, setByCustomer] = useState(false);
+  const [byCustomer, setByCustomer] = useState(true);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
 
   useEffect(() => {
-    fetchBudgetPricing({ byCustomer: false });
+    fetchBudgetPricing({ byCustomer: true });
   }, []);
 
   const customers = pricingview.customers == null ? [] : pricingview.customers;
@@ -44,21 +46,41 @@ function PricingView({ pricingview, fetchBudgetPricing }) {
     });
   }
 
+  function switchTab(key) {
+    const selection = key === "customer" ? true : false;
+    setByCustomer(selection);
+    fetchBudgetPricing({
+      byCustomer: selection,
+      customerId: selectedCustomer,
+      personId: selectedPerson,
+      projectId: null,
+      sellPrice: null
+    });
+  }
+
   return (
-    <>
-      <CustomerList
-        customers={customers}
-        selectedCustomer={selectedCustomer}
-        selectedPerson={selectedPerson}
-        updateCPP={updateCPP}
-      />
-      <PersonList
-        persons={persons}
-        selectedCustomer={selectedCustomer}
-        selectedPerson={selectedPerson}
-        updateCPP={updateCPP}
-      />
-    </>
+    <Tabs
+      activeKey={byCustomer ? "customer" : "person"}
+      onSelect={(k) => switchTab(k)}
+      id="uncontrolled-tab-example"
+    >
+      <Tab eventKey="customer" title="Prices by Customer">
+        <CustomerList
+          customers={customers}
+          selectedCustomer={selectedCustomer}
+          selectedPerson={selectedPerson}
+          updateCPP={updateCPP}
+        />
+      </Tab>
+      <Tab eventKey="person" title="Prices by Person">
+        <PersonList
+          persons={persons}
+          selectedCustomer={selectedCustomer}
+          selectedPerson={selectedPerson}
+          updateCPP={updateCPP}
+        />
+      </Tab>
+    </Tabs>
   );
 }
 

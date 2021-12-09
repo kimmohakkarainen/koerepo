@@ -27,6 +27,7 @@ export default function CustomerList({
         if (c.persons == null) {
           return (
             <CustomerRow
+              key={c.customerId}
               c={c}
               selectedCustomer={selectedCustomer}
               updateCPP={updateCPP}
